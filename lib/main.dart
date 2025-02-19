@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                 "Login to continue",
                 style: TextStyle(
                   fontSize: 16,
-                  color: darkGrayBlack.withOpacity(0.7),
+                  color: darkGrayBlack.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
               const SizedBox(height: 30),
@@ -77,7 +77,14 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpPage(),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Forgot Password?",
                     style: TextStyle(color: darkGrayBlack),
