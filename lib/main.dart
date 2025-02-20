@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//hello nithish
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  final Color lightBeige = const Color.fromRGBO(247, 240, 234, 1);
-  final Color warmBeige = const Color.fromRGBO(225, 213, 201, 1);
-  final Color darkGrayBlack = const Color.fromRGBO(34, 35, 37, 1);
+  static const Color lightBeige = Color.fromRGBO(247, 240, 234, 1);
+  static const Color warmBeige = Color.fromRGBO(225, 213, 201, 1);
+  static const Color darkGrayBlack = Color.fromRGBO(34, 35, 37, 1);
+  static final Color darkGrayBlack70 = Color.fromRGBO(34, 35, 37, 0.7);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,6 @@ class LoginPage extends StatelessWidget {
               Text(
                 "Login to continue",
                 style: TextStyle(
-                  fontSize: 16,
                   color: darkGrayBlack.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
@@ -78,14 +77,7 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpPage(),
-                      ),
-                    );
-                  },
+                  onPressed: () {},
                   child: Text(
                     "Forgot Password?",
                     style: TextStyle(color: darkGrayBlack),
@@ -121,7 +113,9 @@ class LoginPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                        MaterialPageRoute(
+                          builder: (context) => SignUpSelectionPage(),
+                        ),
                       );
                     },
                     child: Text(
@@ -142,72 +136,156 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignUpSelectionPage extends StatelessWidget {
+  const SignUpSelectionPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(247, 240, 234, 1),
+      appBar: AppBar(
+        title: Text("Sign Up", style: TextStyle(color: Colors.black)),
+        backgroundColor: const Color.fromRGBO(225, 213, 201, 1),
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => SignUpForm(
+                          userType: "Alumni",
+                          fields: [
+                            "Name",
+                            "Mail ID",
+                            "College Passed Out Year",
+                            "Domain of Work",
+                            "Organisation Name",
+                            "Username",
+                            "Password",
+                          ],
+                        ),
+                  ),
+                );
+              },
+              child: Text("Sign Up as Alumni"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => SignUpForm(
+                          userType: "Student",
+                          fields: [
+                            "Name",
+                            "Mail ID",
+                            "Department",
+                            "Username",
+                            "Password",
+                          ],
+                        ),
+                  ),
+                );
+              },
+              child: Text("Sign Up as Student"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-  final Color lightBeige = const Color.fromRGBO(247, 240, 234, 1);
-  final Color warmBeige = const Color.fromRGBO(225, 213, 201, 1);
-  final Color darkGrayBlack = const Color.fromRGBO(34, 35, 37, 1);
+class SignUpForm extends StatefulWidget {
+  final String userType;
+  final List<String> fields;
+
+  const SignUpForm({super.key, required this.userType, required this.fields});
+
+  @override
+  SignUpFormState createState() => SignUpFormState();
+}
+
+class SignUpFormState extends State<SignUpForm> {
+  final Map<String, TextEditingController> _controllers = {};
+  bool _isComplete = false;
+
+  @override
+  void initState() {
+    super.initState();
+    for (var field in widget.fields) {
+      _controllers[field] = TextEditingController();
+    }
+  }
+
+  void _checkFields() {
+    setState(() {
+      _isComplete = _controllers.values.every(
+        (controller) => controller.text.isNotEmpty,
+      );
+    });
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text("Sign Up Successful"),
+            content: Text("You have successfully signed up!"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: Text("OK"),
+              ),
+            ],
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: lightBeige,
-      appBar: AppBar(
-        title: Text("Sign Up", style: TextStyle(color: darkGrayBlack)),
-        backgroundColor: warmBeige,
-        iconTheme: IconThemeData(color: darkGrayBlack),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  filled: true,
-                  fillColor: warmBeige,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  filled: true,
-                  fillColor: warmBeige,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: darkGrayBlack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          children:
+              widget.fields.map((field) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: TextField(
+                      controller: _controllers[field],
+                      decoration: InputDecoration(labelText: field),
+                      onChanged: (_) => _checkFields(),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  );
+                }).toList()
+                ..add(
+                  _isComplete
+                      ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: ElevatedButton(
+                          onPressed: _showSuccessDialog,
+                          child: Text("Next"),
+                        ),
+                      )
+                      : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Container(),
+                      ),
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
