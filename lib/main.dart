@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   final Color lightBeige = const Color.fromRGBO(247, 240, 234, 1);
   final Color warmBeige = const Color.fromRGBO(225, 213, 201, 1);
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                 "Login to continue",
                 style: TextStyle(
                   fontSize: 16,
-                  color: darkGrayBlack.withOpacity(0.7),
+                  color: darkGrayBlack.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
               const SizedBox(height: 30),
@@ -137,6 +137,8 @@ class LoginPage extends StatelessWidget {
 }
 
 class SignUpSelectionPage extends StatelessWidget {
+  const SignUpSelectionPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,7 +183,7 @@ class SignUpSelectionPage extends StatelessWidget {
 
 class SignUpPage extends StatelessWidget {
   final String userType;
-  SignUpPage({required this.userType});
+  const SignUpPage({super.key, required this.userType});
 
   @override
   Widget build(BuildContext context) {
